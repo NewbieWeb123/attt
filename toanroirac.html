@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Tính nghịch đảo của modun</h1>
+    <div>
+        Tìm nghịch đảo của <input type="number" id="num"> theo modun <input type="number" id="mod">
+        <button onclick="nghich_dao_modun()">Tính toán</button>
+    </div>
+    <td></td>
+    <div id="result"></div>
+
+    <script>
+        function nghich_dao_modun() {
+            var num = Number(document.getElementById('num').value);
+            var mod = Number(document.getElementById('mod').value);
+            var result = document.getElementById('result');
+            result.innerHTML += 'Cách 1: Tính toán dựa trên số nguyên<br/>';
+            result.innerHTML += 'Ta có: ax + by = GCD(a, b) <=> ' + num + 'x + ' + mod + 'y = GCD(' + num + ', ' + mod + ') <br />';
+            result.innerHTML += 'Đặt x0 = 0, y0 = 1, x1 = 1, y1 = 0 ta có bảng tính binh họa các bước nhuw sau: <br />';
+
+            var x0 = 0, x1 = 1, y0 = 1, y1 = 0, a0 = mod, a1 = num;
+            var table = '<table><tr><th>x0</th><th>x1</th><th>y0</th><th>y1</th><th>q<br/>(phần nguyên của a0 / a1)</th><th>a0</th><th>a1</th></tr>';
+            table += '<tr> <td>0</td> <td>1</td> <td>1</td> <td>0</td> <td>-</td><td>' + a0 + '</td><td>' + a1 + '</td></tr>'
+            while (a1 != 0) {
+                var q = Math.floor(a0 / a1);
+                [x0, x1] = [x1, x0 - q * x1];
+                [y0, y1] = [y1, y0 - q * y1];
+                [a0, a1] = [a1, a0 - q * a1];
+                table += '<tr><td>' + x0 + '</td><td>' + x1 + '</td><td>' + y0 + '</td><td>' + y1 + '</td><td>' + q + '</td><td>' + a0 + '</td><td>' + a1 + '</td></tr>';
+            }
+            table += '</table>';
+            result.innerHTML += table;
+
+            if (a0 > 1) {
+                result.innerHTML += num + ' không có nghịch đảo theo modun ' + mod;
+            } else {
+                if (x0 < 0) {
+                    x_end = x0;
+                    result.innerHTML += 'Vì x0 âm nên:<br />';
+                    x0 += mod;
+                    result.innerHTML += 'Nghịch đảo của ' + num + ' theo modun ' + mod + ' là ' + x_end + ' + ' + mod + ' = ' + x0;
+                } else if (x0 >= 0) {
+                    result.innerHTML += 'Vì x0 không âm nên:<br />';
+                    result.innerHTML += 'Nghịch đảo của ' + num + ' theo modun ' + mod + ' là x0 = ' + x0;
+
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
